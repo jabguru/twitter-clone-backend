@@ -22,10 +22,20 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue
     private Integer id;
-    private String firstName;
-    private String lastName;
+    private String name;
     private String email;
     private String password;
+
+    @ElementCollection
+    private List<String> followers;
+
+    @ElementCollection
+    private List<String> following;
+
+    private String profilePic;
+    private String bannerPic;
+    private String bio;
+    private Boolean isTwitterBlue;
 
     @Enumerated(EnumType.STRING)
     private Role role;

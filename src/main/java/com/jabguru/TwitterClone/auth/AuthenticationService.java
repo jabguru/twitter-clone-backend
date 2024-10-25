@@ -21,10 +21,8 @@ public class AuthenticationService  {
     private final AuthenticationManager authenticationManager;
     private final RefreshTokenService refreshTokenService;
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public AuthenticationResponse register(AuthenticationRequest request) {
         var user = User.builder()
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)

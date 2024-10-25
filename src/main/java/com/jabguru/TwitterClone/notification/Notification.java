@@ -1,0 +1,29 @@
+package com.jabguru.TwitterClone.notification;
+
+import com.jabguru.TwitterClone.user.User;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+public class Notification {
+    @Id
+    @GeneratedValue
+    private Integer id;
+
+    @ManyToOne
+    private User user;
+
+    private String text;
+    private String postId;
+    private String uid;
+
+    @Enumerated(EnumType.STRING)
+    private NotificationType notificationType;
+}
