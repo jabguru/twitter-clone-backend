@@ -30,10 +30,10 @@ public class User implements UserDetails {
     private String password;
 
     @ElementCollection
-    private List<String> followers;
+    private List<Integer> followers;
 
     @ElementCollection
-    private List<String> following;
+    private List<Integer> following;
 
     private String profilePic;
     private String bannerPic;
