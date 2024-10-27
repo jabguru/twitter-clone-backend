@@ -45,6 +45,6 @@ public class Tweet {
     private List<String> commentIds;
 
     private Integer reshareCount;
-    private String retweetedBy;
-    private String repliedTo;
+    private Integer retweetedBy;
+    private Integer repliedTo;
 }
