@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,6 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Tweet {
     @Id
     @GeneratedValue
@@ -36,6 +39,8 @@ public class Tweet {
     @Enumerated(EnumType.STRING)
     private TweetType tweetType;
 
+    @CreatedDate
+    @Column(updatable = false)
     private LocalDateTime tweetedAt;
 
     @ElementCollection

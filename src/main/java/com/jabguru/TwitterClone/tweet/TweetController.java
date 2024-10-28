@@ -1,5 +1,7 @@
 package com.jabguru.TwitterClone.tweet;
 
+import com.jabguru.TwitterClone.user.User;
+import com.jabguru.TwitterClone.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,11 +14,16 @@ import java.util.List;
 @RequestMapping("api/v1/tweets")
 public class TweetController {
     private final TweetService tweetService;
+    private final UserService userService;
 
     @PostMapping("/share")
-    public ResponseEntity<String> shareTweet(@RequestBody Tweet tweet){
-        tweetService.shareTweet(tweet);
-        return new ResponseEntity<>("Tweet shared successfully", HttpStatus.CREATED);
+    public ResponseEntity<Tweet> shareTweet(@RequestBody Tweet tweet, @RequestParam Integer userId){
+        User user = userService.getUser(userId);
+        if(user != null){
+            tweet.setUser(user);
+            return new ResponseEntity<>(tweetService.shareTweet(tweet), HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping

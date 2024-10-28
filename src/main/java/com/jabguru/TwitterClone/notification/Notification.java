@@ -17,12 +17,9 @@ public class Notification {
     @GeneratedValue
     private Integer id;
 
-    @ManyToOne
-    private User user;
-
+    private Integer uid;
     private String text;
-    private String postId;
-    private String uid;
+    private Integer postId;
 
     @Enumerated(EnumType.STRING)
     private NotificationType notificationType;

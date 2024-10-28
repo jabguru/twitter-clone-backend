@@ -3,7 +3,7 @@ package com.jabguru.TwitterClone.tweet;
 import java.util.List;
 
 public interface TweetService {
-    void shareTweet(Tweet tweet);
+    Tweet shareTweet(Tweet tweet);
    List<Tweet> getTweets();
    // Stream<RealtimeMessage> getLatestTweet();
     boolean updateTweet(Integer id, Tweet tweet);

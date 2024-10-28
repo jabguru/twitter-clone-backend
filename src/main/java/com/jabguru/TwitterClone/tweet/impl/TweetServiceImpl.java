@@ -14,8 +14,8 @@ import java.util.Optional;
 public class TweetServiceImpl implements TweetService {
     private final TweetRepository tweetRepository;
     @Override
-    public void shareTweet(Tweet tweet) {
-        tweetRepository.save(tweet);
+    public Tweet shareTweet(Tweet tweet) {
+        return tweetRepository.save(tweet);
     }
 
     @Override
