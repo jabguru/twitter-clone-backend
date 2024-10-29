@@ -17,11 +17,21 @@ public class RefreshTokenService {
     RefreshTokenRepository refreshTokenRepository;
 
     public RefreshToken createRefreshToken(User user){
-        RefreshToken refreshToken = RefreshToken.builder()
+        String token = UUID.randomUUID().toString();
+        Instant expiryDate = Instant.now().plusSeconds(60 * 60 * 24);
+        Optional<RefreshToken> existingToken = refreshTokenRepository.findByUserId(user.getId());
+
+        RefreshToken refreshToken = existingToken.orElseGet(() -> RefreshToken.builder()
                 .user(user)
-                .token(UUID.randomUUID().toString())
-                .expiryDate(Instant.now().plusMillis(1000 * 60 * 10)) // set expiry of refresh token to 10 minutes - you can configure it application.properties file
-                .build();
+                .token(token)
+                .expiryDate(expiryDate) // set expiry of refresh token to 24hrs - you can configure it application.properties file
+                .build());
+
+        if (existingToken.isPresent()) {
+            refreshToken.setToken(token);
+            refreshToken.setExpiryDate(expiryDate);
+        }
+
         return refreshTokenRepository.save(refreshToken);
     }
 

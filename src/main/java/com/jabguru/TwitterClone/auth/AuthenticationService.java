@@ -29,13 +29,6 @@ public class AuthenticationService  {
                 .build();
         repository.save(user);
         return true;
-//        var jwtToken = jwtService.generateToken(user);
-//        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user);
-//        return AuthenticationResponse.builder()
-//                .accessToken(jwtToken)
-//                .refreshToken(refreshToken.getToken())
-//                .user(user)
-//                .build();
     }
 
     public  AuthenticationResponse authenticate(AuthenticationRequest request) {

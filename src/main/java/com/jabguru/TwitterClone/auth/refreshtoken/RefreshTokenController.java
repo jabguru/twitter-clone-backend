@@ -16,15 +16,16 @@ public class RefreshTokenController {
     private final JwtService jwtService;
 
     @PostMapping("/refreshToken")
-    public AuthenticationResponse refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest){
-        return refreshTokenService.findByToken(refreshTokenRequest.getToken())
+    public AuthenticationResponse refreshToken(@RequestBody String refreshToken){
+        return refreshTokenService.findByToken(refreshToken)
                 .map(refreshTokenService::verifyExpiration)
                 .map(RefreshToken::getUser)
                 .map(userInfo -> {
                     String accessToken = jwtService.generateToken(userInfo);
                     return AuthenticationResponse.builder()
                             .accessToken(accessToken)
-                            .refreshToken(refreshTokenRequest.getToken()).build();
+                            .user(userInfo)
+                            .refreshToken(refreshToken).build();
                 }).orElseThrow(() ->new RuntimeException("Refresh Token is not in DB..!!"));
     }
 }
