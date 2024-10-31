@@ -18,7 +18,7 @@ public class NotificationController {
 
 
     @PostMapping("/create")
-    public ResponseEntity<String> createNotification(@RequestBody Notification notification, @RequestParam int userId){
+    public ResponseEntity<String> createNotification(@RequestBody Notification notification, @RequestParam Integer userId){
         User user = userService.getUser(userId);
 
         if(user != null){
