@@ -17,7 +17,9 @@ public class Notification {
     @GeneratedValue
     private Integer id;
 
-    private Integer uid;
+    @ManyToOne
+    private User user;
+
     private String text;
     private Integer postId;
 

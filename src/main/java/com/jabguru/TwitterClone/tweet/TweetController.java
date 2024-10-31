@@ -1,13 +1,18 @@
 package com.jabguru.TwitterClone.tweet;
 
+import com.jabguru.TwitterClone.image.ImageService;
 import com.jabguru.TwitterClone.user.User;
 import com.jabguru.TwitterClone.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,12 +20,30 @@ import java.util.List;
 public class TweetController {
     private final TweetService tweetService;
     private final UserService userService;
+    private final ImageService imageService;
 
     @PostMapping("/share")
-    public ResponseEntity<Tweet> shareTweet(@RequestBody Tweet tweet, @RequestParam Integer userId){
+    public ResponseEntity<Tweet> shareTweet(@ModelAttribute Tweet tweet, @RequestParam Integer userId, @RequestParam("files") Optional<List<MultipartFile>> files){
         User user = userService.getUser(userId);
         if(user != null){
             tweet.setUser(user);
+
+            if(files.isPresent()){
+                List<String> fileUrls = new ArrayList<>();
+
+                files.get().forEach(file -> {
+                    String url;
+                    try {
+                        url = imageService.saveImage(file);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    fileUrls.add(url);
+                });
+
+                tweet.setImageLinks(fileUrls);
+            }
+
             return new ResponseEntity<>(tweetService.shareTweet(tweet), HttpStatus.CREATED);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);

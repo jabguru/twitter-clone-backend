@@ -20,6 +20,6 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public List<Notification> getNotifications(int userId) {
-        return notificationRepository.findByUid(userId);
+        return notificationRepository.findByUserId(userId);
     }
 }
