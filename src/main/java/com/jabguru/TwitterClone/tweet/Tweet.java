@@ -44,12 +44,12 @@ public class Tweet {
     private LocalDateTime tweetedAt;
 
     @ElementCollection
-    private List<String> likes;
+    private List<Integer> likes;
 
     @ElementCollection
-    private List<String> commentIds;
+    private List<Integer> commentIds;
 
     private Integer reshareCount;
-    private Integer retweetedBy;
+    private String retweetedBy;
     private Integer repliedTo;
 }

@@ -28,7 +28,21 @@ public class TweetServiceImpl implements TweetService {
         Optional<Tweet> tweetOptional = tweetRepository.findById(id);
 
         if (tweetOptional.isPresent()) {
-            tweetRepository.save(updatedTweet);
+            Tweet tweet = tweetOptional.get();
+
+            if (updatedTweet.getLikes() != null) {
+                tweet.setLikes(updatedTweet.getLikes());
+            }
+
+            if (updatedTweet.getCommentIds() != null) {
+                tweet.setCommentIds(updatedTweet.getCommentIds());
+            }
+
+            if(updatedTweet.getReshareCount() != null){
+                tweet.setReshareCount(updatedTweet.getReshareCount());
+            }
+
+            tweetRepository.save(tweet);
             return true;
         }
         return false;
