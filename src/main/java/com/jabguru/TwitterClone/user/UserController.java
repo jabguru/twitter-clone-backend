@@ -17,34 +17,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-    private final ImageService imageService;
 
-    @PostMapping("/save")
-    public ResponseEntity<String> saveUser(@ModelAttribute User user, @RequestParam("profilePhoto") Optional<MultipartFile> profilePhoto, @RequestParam("bannerPhoto") Optional<MultipartFile> bannerPhoto){
-        if(profilePhoto.isPresent()){
-            String url;
-            try {
-                url = imageService.saveImage(profilePhoto.get());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-            user.setProfilePic(url);
-        }
-
-        if(bannerPhoto.isPresent()){
-            String url;
-            try {
-                url = imageService.saveImage(bannerPhoto.get());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-            user.setBannerPic(url);
-        }
-
-        userService.saveUser(user);
-        return new ResponseEntity<>("User saved successfully", HttpStatus.OK);
+    @PostMapping("/update/{id}")
+    public ResponseEntity<String> saveUser(@ModelAttribute User user, @RequestParam("profilePhoto") Optional<MultipartFile> profilePhoto, @RequestParam("bannerPhoto") Optional<MultipartFile> bannerPhoto, @PathVariable Integer id){
+        boolean updated = userService.saveUser(id, user, profilePhoto, bannerPhoto);
+        if(updated)
+            return new ResponseEntity<>("User updated successfully", HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/{id}")
