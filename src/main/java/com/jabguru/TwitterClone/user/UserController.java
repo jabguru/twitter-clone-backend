@@ -35,7 +35,7 @@ public class UserController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<User>> searchUserByName(String name){
+    public ResponseEntity<List<User>> searchUserByName(@RequestParam String name){
         return new ResponseEntity<>(userService.searchUserByName(name), HttpStatus.OK);
     }
 
