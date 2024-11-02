@@ -1,9 +1,12 @@
 package com.jabguru.TwitterClone.user.impl;
 
 import com.jabguru.TwitterClone.image.ImageService;
+import com.jabguru.TwitterClone.tweet.websocket.TweetAction;
+import com.jabguru.TwitterClone.tweet.websocket.TweetMessage;
 import com.jabguru.TwitterClone.user.User;
 import com.jabguru.TwitterClone.user.UserRepository;
 import com.jabguru.TwitterClone.user.UserService;
+import com.jabguru.TwitterClone.user.websocket.UserMessageHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +20,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final ImageService imageService;
+    private final UserMessageHandler userMessageHandler;
 
     @Override
     public boolean saveUser(Integer id, User updatedUser, Optional<MultipartFile> profilePhoto, Optional<MultipartFile> bannerPhoto) {
@@ -64,7 +68,15 @@ public class UserServiceImpl implements UserService {
                 user.setBannerPic(url);
             }
 
-            userRepository.save(user);
+            User savedUser = userRepository.save(user);
+
+            try {
+                userMessageHandler.sendMessage(savedUser);
+            } catch (IOException e) {
+                System.out.println("Error sending tweet message:" + e.getMessage());
+            }
+
+
             return true;
         }
         return false;

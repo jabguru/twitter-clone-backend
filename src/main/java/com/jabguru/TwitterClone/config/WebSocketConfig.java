@@ -1,5 +1,6 @@
 package com.jabguru.TwitterClone.config;
 
+import com.jabguru.TwitterClone.user.websocket.UserMessageHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
@@ -12,9 +13,11 @@ import com.jabguru.TwitterClone.tweet.websocket.TweetMessageHandler;
 @RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketConfigurer {
     private final TweetMessageHandler tweetMessageHandler;
+    private final UserMessageHandler userMessageHandler;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(tweetMessageHandler, "/tweets");
+        registry.addHandler(userMessageHandler, "/user");
     }
 }

@@ -24,7 +24,10 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorizeHttpRequests) ->
                         authorizeHttpRequests
-                                .requestMatchers("/api/v1/refreshToken", "/images/**", "/api/v1/auth/**", "/tweets").permitAll()
+                                .requestMatchers("/api/v1/refreshToken", "/images/**", "/api/v1/auth/**",
+//                                websockets below
+                                        "/tweets", "/user"
+                                ).permitAll()
                                 .anyRequest()
                                 .authenticated())
                 .sessionManagement((sessionManagement) ->
