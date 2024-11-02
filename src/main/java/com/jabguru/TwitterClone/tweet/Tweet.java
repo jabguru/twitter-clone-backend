@@ -1,5 +1,6 @@
 package com.jabguru.TwitterClone.tweet;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jabguru.TwitterClone.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -41,6 +42,7 @@ public class Tweet {
 
     @CreatedDate
     @Column(updatable = false)
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime tweetedAt;
 
     @ElementCollection

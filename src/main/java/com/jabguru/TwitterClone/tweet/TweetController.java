@@ -1,6 +1,8 @@
 package com.jabguru.TwitterClone.tweet;
 
 import com.jabguru.TwitterClone.image.ImageService;
+import com.jabguru.TwitterClone.tweet.websocket.TweetMessage;
+import com.jabguru.TwitterClone.tweet.websocket.TweetMessageHandler;
 import com.jabguru.TwitterClone.user.User;
 import com.jabguru.TwitterClone.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -19,33 +21,12 @@ import java.util.Optional;
 @RequestMapping("api/v1/tweets")
 public class TweetController {
     private final TweetService tweetService;
-    private final UserService userService;
-    private final ImageService imageService;
 
     @PostMapping("/share")
     public ResponseEntity<Tweet> shareTweet(@ModelAttribute Tweet tweet, @RequestParam Integer userId, @RequestParam("files") Optional<List<MultipartFile>> files){
-        User user = userService.getUser(userId);
-        if(user != null){
-            tweet.setUser(user);
-
-            if(files.isPresent()){
-                List<String> fileUrls = new ArrayList<>();
-
-                files.get().forEach(file -> {
-                    String url;
-                    try {
-                        url = imageService.saveImage(file);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                    fileUrls.add(url);
-                });
-
-                tweet.setImageLinks(fileUrls);
-            }
-
-            return new ResponseEntity<>(tweetService.shareTweet(tweet), HttpStatus.CREATED);
-        }
+        Tweet createdTweet = tweetService.shareTweet(userId, tweet, files);
+        if(createdTweet != null)
+            return new ResponseEntity<>(createdTweet, HttpStatus.CREATED);
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
@@ -53,8 +34,6 @@ public class TweetController {
     public ResponseEntity<List<Tweet>> getTweets(){
         return ResponseEntity.ok(tweetService.getTweets());
     }
-
-    // Stream<RealtimeMessage> getLatestTweet();
 
     @PostMapping("/update/{id}")
     public ResponseEntity<String>  updateTweet(@PathVariable Integer id,@RequestBody Tweet tweet){
