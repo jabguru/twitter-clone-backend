@@ -26,7 +26,7 @@ public class SecurityConfiguration {
                         authorizeHttpRequests
                                 .requestMatchers("/api/v1/refreshToken", "/images/**", "/api/v1/auth/**",
 //                                websockets below
-                                        "/tweets", "/user"
+                                        "/tweets", "/user", "/notifications"
                                 ).permitAll()
                                 .anyRequest()
                                 .authenticated())
